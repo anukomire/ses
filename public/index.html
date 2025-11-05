@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFT ELECTRONIC SOLUTIONS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #d2edf8;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: black;
+            border-radius: 6px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: black;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: black;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav a:hover {
+            color: #ff6b35;
+        }
+        
+        .cta-button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: #333;
+        }
+        
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Styles */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #d2edf8 0%, #e8f4fc 100%);
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero-description {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: black;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #333;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: black;
+            border: 2px solid black;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            background: rgba(0,0,0,0.05);
+        }
+        
+        /* Section Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: black;
+            margin-bottom: 3rem;
+        }
+        
+        /* Clients Styles */
+        .clients {
+            padding: 4rem 0;
+            background: white;
+        }
+        
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .client-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .client-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .client-logo {
+            width: 60px;
+            height: 60px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .client-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Culture Styles */
+        .culture {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+        
+        .culture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .culture-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .culture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .culture-image {
+            width: 100%;
+            height: 200px;
+            background: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .culture-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: black;
+            margin-bottom: 1rem;
+        }
+        
+        .culture-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: black;
+            color: white;
+            padding: 3rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section p {
+            color: #ccc;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-description {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: #ff6b35;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            text-align: center;
+            color: #999;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            
+            .nav-open {
+                display: flex;
+            }
+            
+            .mobile-menu-button {
+                display: block;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 200px;
+            }
+            
+            .clients-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 6rem 1rem 3rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .clients-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .culture-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <!-- React app will be rendered here -->
+        <div class="app">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-container">
+                    <div class="logo">
+                        <div class="logo-icon"></div>
+                        <span class="logo-text">SOFT ELECTRONIC SOLUTIONS</span>
+                    </div>
+                    
+                    <nav class="nav">
+                        <a href="#home">Home</a>
+                        <a href="#clients">Clients</a>
+                        <a href="#culture">Culture</a>
+                        <a href="#contact">Contact</a>
+                    </nav>
+                    
+                    <button class="cta-button">Get Started</button>
+                    
+                    <button class="mobile-menu-button">☰</button>
+                </div>
+            </header>
+            
+            <!-- Hero -->
+            <section id="home" class="hero">
+                <div class="hero-container">
+                    <h1 class="hero-title">
+                        Building the Future of<br />Digital Innovation
+                    </h1>
+                    <p class="hero-description">
+                        We create cutting-edge solutions that transform businesses and drive growth through technology excellence.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary">Start Free Trial</button>
+                        <button class="btn-secondary">View Demo</button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Clients -->
+            <section id="clients" class="clients">
+                <div class="container">
+                    <h2 class="section-title">Trusted by Industry Leaders</h2>
+                    <div class="clients-grid">
+                        <div class="client-card">
+                            <div class="client-logo">C1</div>
+                            <h3 class="client-name">Client One</h3>
+                        </div>
+                        <div class="client-card">
+                            <div class="client-logo">C2</div>
+                            <h3 class="client-name">Client Two</h3>
+                        </div>
+                        <div class="client-card">
+                            <div class="client-logo">C3</div>
+                            <h3 class="client-name">Client Three</h3>
+                        </div>
+                        <div class="client-card">
+                            <div class="client-logo">C4</div>
+                            <h3 class="client-name">Client Four</h3>
+                        </div>
+                        <div class="client-card">
+                            <div class="client-logo">C5</div>
+                            <h3 class="client-name">Client Five</h3>
+                        </div>
+                        <div class="client-card">
+                            <div class="client-logo">C6</div>
+                            <h3 class="client-name">Client Six</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Culture -->
+            <section id="culture" class="culture">
+                <div class="container">
+                    <h2 class="section-title">Our Culture of Excellence</h2>
+                    <div class="culture-grid">
+                        <div class="culture-card">
+                            <div class="culture-image">Innovation</div>
+                            <h3 class="culture-title">Innovation First</h3>
+                            <p class="culture-description">
+                                We foster a culture of continuous innovation, encouraging our team to push boundaries and explore new possibilities in technology.
+                            </p>
+                        </div>
+                        <div class="culture-card">
+                            <div class="culture-image">Collaboration</div>
+                            <h3 class="culture-title">Team Collaboration</h3>
+                            <p class="culture-description">
+                                Our collaborative environment brings together diverse talents to create solutions that exceed expectations and drive success.
+                            </p>
+                        </div>
+                        <div class="culture-card">
+                            <div class="culture-image">Growth</div>
+                            <h3 class="culture-title">Professional Growth</h3>
+                            <p class="culture-description">
+                                We invest in our people's growth through continuous learning opportunities and career development programs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Footer -->
+            <footer id="contact" class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <div class="footer-section">
+                            <div class="footer-logo">
+                                <div class="logo-icon"></div>
+                                <span class="logo-text">SOFT ELECTRONIC SOLUTIONS</span>
+                            </div>
+                            <p class="footer-description">
+                                Transforming businesses through innovative technology solutions and exceptional digital experiences.
+                            </p>
+                        </div>
+                        
+                        <div class="footer-section">
+                            <h4 class="footer-title">Contact</h4>
+                            <p>123 Innovation Street</p>
+                            <p>Tech City, TC 12345</p>
+                            <p>info@techcorp.com</p>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                        
+                        <div class="footer-section">
+                            <h4 class="footer-title">Follow Us</h4>
+                            <div class="social-icons">
+                                <div class="social-icon">T</div>
+                                <div class="social-icon">L</div>
+                                <div class="social-icon">G</div>
+                                <div class="social-icon">I</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-bottom">
+                        <p>&copy; 2024 SOFT ELECTRONIC SOLUTIONS. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const nav = document.querySelector('.nav');
+            
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    nav.classList.toggle('nav-open');
+                });
+            }
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // Close mobile menu if open
+                        if (nav.classList.contains('nav-open')) {
+                            nav.classList.remove('nav-open');
+                        }
+                    }
+                });
+            });
+            
+            // Add hover effects to buttons
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Add click handlers for CTA buttons
+            document.querySelectorAll('.btn-primary, .btn-secondary, .cta-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Thank you for your interest in TechCorp! Our team will contact you soon.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
