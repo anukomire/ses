@@ -1038,14 +1038,15 @@ const Home = () => {
     { id: 2, name: "SBL", logo: "/clients/SBL.png" },
     { id: 3, name: "ADVANTECH", logo: "/clients/Advantech.png" },
     { id: 4, name: "XILINX", logo: "/clients/Xilinx.png" },
-    { id: 5, name: "SCIENTIFIC SIGLANT", logo: "/logos/tech5.png" },
+    { id: 5, name: "SCIENTIFIC ", logo: "/clients/Scientific-logo1.png" },
+    {id: 6, name: "SIGLANT", logo: "/clients/siglent-logo1.png"}
   ];
 
   // Defensive Solutions logos (replace with actual image paths)
   const defensiveSolutions = [
-    { id: 6, name: "DRDL", logo: "/clients/drdo-logo-png_seeklogo-343990.png" },
-    { id: 7, name: "BDL", logo: "/clients/BDL_Logo_2.jpg" },
-    { id: 8, name: "RCI", logo: "/clients/DRDO-RCI-logo.webp" },
+    { id: 7, name: "DRDL", logo: "/clients/drdo-logo-png_seeklogo-343990.png" },
+    { id: 8, name: "BDL", logo: "/clients/BDL_Logo_2.jpg" },
+    { id: 9, name: "RCI", logo: "/clients/DRDO-RCI-logo.webp" },
    
   ];
 

@@ -6,6 +6,13 @@ const querystring = require('querystring');
 
 const PORT = process.env.PORT || 3000;
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'softelectronicsolutions@gmail.com',
+     pass: 'esud nqnh zqnh zqau xqvg' 
+  }
+});
 // In-memory storage for contact form submissions
 let contacts = [];
 let projects = [
@@ -37,16 +44,7 @@ let projects = [
     created_at: "2024-01-10T00:00:00.000Z"
   }
 ];
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    // user: 'anukomire81@gmail.com',
-    user: 'softelectronicsolutions@gmail.com',
-     pass: 'dyoe yafw ozhz lfzs' 
-    // pass: 'wxzz rqlc rqjm dtmh' ses-books
-    // pass: 'mbho qhkx umvi txkr' anukomire
-  }
-});
+
 // HTML template for the SPA
 const getHTMLTemplate = () => `
 <!DOCTYPE html>
