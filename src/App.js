@@ -1,10 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
+import Contact from './contact';
 
 // Main App Component
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Login state variables
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+
+  // Login handler
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+    
+    try {
+      if (loginData.username === 'user' && loginData.password === 'user@1234') {
+        // Successful login
+        window.open('http://192.168.29.239:3000', '_blank');
+        setIsLoginOpen(false);
+        setLoginData({ username: '', password: '' });
+      } else {
+        setLoginError('Invalid username or password');
+      }
+    } catch (error) {
+      setLoginError('Login failed. Please try again.');
+    }
+  };
 
   useEffect(() => {
     // Add scroll animations
@@ -45,7 +69,7 @@ function App() {
                   alt="Soft Electronic Solutions Logo"
                   className="logo-image"
                 />
-                <span className="logo-text"><span>SOFT</span> <span2 className="blue-text">ELECTRONIC</span2><span> SOLUTIONS</span></span>
+                <span className="logo-text"><span className="orange-text">SOFT</span> <span2 className="blue-text">ELECTRONIC</span2><span className="orange-text"> SOLUTIONS</span></span>
               </div>
               
               <ul className={`nav-links ${isMenuOpen ? 'nav-open' : ''}`}>
@@ -55,6 +79,10 @@ function App() {
                 <li><a href="/projects" onClick={() => setIsMenuOpen(false)}>Projects</a></li>
                 <li><a href="/contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
               </ul>
+              
+              <button className="inventory-button" onClick={() => setIsLoginOpen(true)}>
+                Inventory
+              </button>
               
               <button className="cta-button" onClick={() => window.location.href = '/contact'}>
                 Get Started
@@ -69,6 +97,56 @@ function App() {
             </nav>
           </div>
         </header>
+
+        {/* Login Modal */}
+        {isLoginOpen && (
+          <div className="login-modal-overlay">
+            <div className="login-modal">
+              <div className="login-header">
+                <h3>Inventory Login</h3>
+                <button onClick={() => setIsLoginOpen(false)}>×</button>
+              </div>
+              
+              <form onSubmit={handleLoginSubmit} className="login-form">
+                <div className="form-group">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    value={loginData.username}
+                    onChange={(e) => setLoginData({...loginData, username: e.target.value})}
+                    required
+                    placeholder="Enter username"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                    required
+                    placeholder="Enter password"
+                  />
+                </div>
+                
+                <button type="submit" className="cta-button">
+                  Login to Inventory
+                </button>
+                
+                {loginError && (
+                  <div className="login-error">
+                    {loginError}
+                  </div>
+                )}
+                
+                <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', textAlign: 'center' }}>
+                 
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <main>
           <Routes>
@@ -91,7 +169,7 @@ function App() {
                     alt="Soft Electronic Solutions Logo"
                     className="logo-image"
                   />
-                  <span className="logo-text"><span>SOFT</span> <span2 className="blue-text">ELECTRONIC</span2><span> SOLUTIONS</span></span>
+                  <span className="logo-text"><span className="orange-text">SOFT</span> <span2 className="blue-text">ELECTRONIC</span2><span className="orange-text"> SOLUTIONS</span></span>
                 </div>
                 <div className="social-icons">
                   <div className="social-icon">⌨</div>
@@ -146,7 +224,7 @@ function App() {
             --body-bg: #ECF0F1;      
             --header-text: #FFFFFF;  
             --footer-text: #ECF0F1;
-            --accent-blue: #eca553ff;        
+            --accent-blue: #3498db;        
             --accent-purple: #9B59B6;   
           }
 
@@ -206,10 +284,15 @@ function App() {
             flex-wrap: wrap;
             gap: 0.2rem;
           }
+          
           .blue-text {
             color: #00bfff;
             font-weight: bold;
           }
+            .orange-text{
+          color: #d6612aff;
+            }
+
           /* Hero Section with Video Background */
           .hero {
             position: relative;
@@ -221,6 +304,7 @@ function App() {
             align-items: center;
             justify-content: center;
           }
+          
           .video-background {
             position: absolute;
             top: 5%;
@@ -230,6 +314,7 @@ function App() {
             z-index: 1;              
             overflow: hidden;
           }
+          
           .video-background video {
             width: 100%;
             height: 100%;
@@ -237,330 +322,225 @@ function App() {
             object-position: center;
           }
 
-         /* Horizontal Scrolling Panel Styles */
-.horizontal-scroller-container {
-  padding: 5px 0;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-top: 1px solid rgba(0,0,0,0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.horizontal-scroller {
-  width: 100%;
-  overflow-x: hidden;
-  white-space: nowrap;
-  position: relative;
-  padding: 10px 0;
-}
-  .horizontal-scroller::before {
-  left: 0;
-  background: linear-gradient(to right, #f8f9fa, transparent);
-}
-
-.horizontal-scroller::after {
-  right: 0;
-  background: linear-gradient(to left, #f8f9fa, transparent);
-}
-
-.scrolling-content {
-  display: inline-flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 1rem;
-  will-change: transform;
-}
-
-.scroll-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 12px 20px;
-  background: var(--primary-white);
-  border-radius: 50px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 107, 53, 0.1);
-  flex-shrink: 0;
-}
-
-.scroll-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
-  border-color: var(--primary-orange);
-}
-
-.point-icon {
-  color: var(--primary-orange);
-  font-weight: bold;
-  font-size: 1.2rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-
-.point-text {
-  color: var(--dark-gray);
-  font-size: 1rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.pause-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 107, 53, 0.9);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  z-index: 10;
-  opacity: 0;
-  animation: fadeIn 0.3s ease forwards;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .horizontal-scroller-container {
-    padding: 20px 0;
-  }
-  
-  .scrolling-content {
-    gap: 1.5rem;
-  }
-  
-  .scroll-item {
-    padding: 10px 16px;
-    border-radius: 40px;
-  }
-  
-  .point-text {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .horizontal-scroller-container {
-    padding: 15px 0;
-  }
-  
-  .scrolling-content {
-    gap: 1rem;
-    padding: 0 0.5rem;
-  }
-  
-  .scroll-item {
-    padding: 8px 14px;
-    border-radius: 35px;
-  }
-  
-  .point-text {
-    font-size: 0.85rem;
-  }
-  
-  .point-icon {
-    font-size: 1rem;
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* Gradient overlay for fade effect on edges */
-.horizontal-scroller::before,
-.horizontal-scroller::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 60px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.horizontal-scroller::before {
-  left: 0;
-  background: linear-gradient(to right, #f8f9fa, transparent);
-}
-
-.horizontal-scroller::after {
-  right: 0;
-  background: linear-gradient(to left, #f8f9fa, transparent);
-}
-
-/* Animation for pause indicator */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(3); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(4); }
-}
-   .features-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          gap: 2rem;
-          margin-top: 3rem;
-        }
-
-        .feature-card {
-          background: var(--primary-white);
-          padding: 2rem;
-          border-radius: 15px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-          min-height: 300px;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .feature-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        .feature-header {
-          text-align: center;
-          margin-bottom: 1.5rem;
-        }
-
-        .feature-header h3 {
-          font-size: 1.5rem;
-          color: var(--primary-black);
-          margin-bottom: 0.5rem;
-        }
-
-        .feature-header p {
-          color: var(--dark-gray);
-          font-size: 0.9rem;
-        }
-
-        .logos-container {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        /* Logo Grid Layout */
-        .logos-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-          gap: 1rem;
-          width: 100%;
-          place-items: center;
-        }
-
-        .logo-item {
-          position: relative;
-          width: 80px;
-          height: 80px;
-          padding: 10px;
-          background: var(--light-gray);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          overflow: hidden;
-          border: 2px solid transparent;
-        }
-
-        .logo-item:hover {
-          transform: scale(1.05);
-        }
-
-        .logo-item.active {
-          transform: scale(1.15);
-          box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
-          border-color: var(--primary-orange);
-          z-index: 10;
-          background: var(--primary-white);
-          filter: brightness(1.1);
-        }
-
-        .partner-logo {
-          max-width: 100%;
-          max-height: 100%;
-          object-fit: contain;
-          transition: all 0.3s ease;
-        }
-
-        .logo-item.active .partner-logo {
-          filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-        }
-
-        .logo-overlay {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: rgba(44, 62, 80, 0.9);
-          color: white;
-          padding: 0.5rem;
-          text-align: center;
-          font-size: 0.7rem;
-          transform: translateY(100%);
-          transition: transform 0.3s ease;
-          pointer-events: none;
-        }
-
-        .logo-item:hover .logo-overlay,
-        .logo-item.active .logo-overlay {
-          transform: translateY(0);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1200px) {
-          .logos-grid {
-            grid-template-columns: repeat(3, 1fr);
+          /* Horizontal Scrolling Panel Styles */
+          .horizontal-scroller-container {
+            padding: 5px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
           }
-        }
 
-        @media (max-width: 768px) {
+          .horizontal-scroller {
+            width: 100%;
+            overflow-x: hidden;
+            white-space: nowrap;
+            position: relative;
+            padding: 10px 0;
+          }
+
+          .horizontal-scroller::before,
+          .horizontal-scroller::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 60px;
+            z-index: 2;
+            pointer-events: none;
+          }
+
+          .horizontal-scroller::before {
+            left: 0;
+            background: linear-gradient(to right, #f8f9fa, transparent);
+          }
+
+          .horizontal-scroller::after {
+            right: 0;
+            background: linear-gradient(to left, #f8f9fa, transparent);
+          }
+
+          .scrolling-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 0 1rem;
+            will-change: transform;
+          }
+
+          .scroll-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 12px 20px;
+            background: var(--primary-white);
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            flex-shrink: 0;
+          }
+
+          .scroll-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+            border-color: var(--primary-orange);
+          }
+
+          .point-icon {
+            color: var(--primary-orange);
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+          }
+
+          .point-text {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+          }
+
+          .pause-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 107, 53, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+          }
+
+          /* Features Grid */
           .features-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
           }
 
           .feature-card {
-            padding: 1.5rem;
-            min-height: 250px;
+            background: var(--primary-white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
           }
 
-          .logos-grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.75rem;
+          .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
           }
-
-          .logo-item {
-            width: 70px;
-            height: 70px;
-            padding: 8px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .logos-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-          }
-
-          .logo-item {
-            width: 60px;
-            height: 60px;
-            padding: 6px;
+          
+          .feature-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
           }
 
           .feature-header h3 {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            color: var(--primary-black);
+            margin-bottom: 0.5rem;
           }
-        }
+
+          .feature-header p {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+          }
+
+          .logos-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          /* Logo Grid Layout */
+          .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            place-items: center;
+          }
+
+          .logo-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            padding: 10px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 2px solid transparent;
+          }
+
+          .logo-item:hover {
+            transform: scale(1.05);
+          }
+
+          .logo-item.active {
+            transform: scale(1.15);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+            border-color: var(--primary-orange);
+            z-index: 10;
+            background: var(--primary-white);
+            filter: brightness(1.1);
+          }
+
+          .partner-logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: all 0.3s ease;
+          }
+
+          .logo-item.active .partner-logo {
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+          }
+
+          .logo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            pointer-events: none;
+          }
+
+          .logo-item:hover .logo-overlay,
+          .logo-item.active .logo-overlay {
+            transform: translateY(0);
+          }
+
           .hero-content {
             position: relative;
             z-index: 2;
@@ -568,6 +548,7 @@ function App() {
             margin: 0 auto;
             padding: 0 20px;
           }
+          
           .hero::before {
             content: '';
             position: absolute;
@@ -632,47 +613,7 @@ function App() {
             color: #ccc;
           }
 
-          /* Responsive adjustments for hero video */
-          @media (max-width: 768px) {
-            .hero {
-              padding: 120px 0 80px;
-              min-height: 80vh;
-            }
-            
-            .hero h1 {
-              font-size: 2.5rem;
-            }
-            
-            .hero p {
-              font-size: 1.1rem;
-            }
-            
-            .video-background video {
-              object-fit: cover;
-              height: 100%;
-            }
-          }
-
-          @media (max-width: 480px) {
-            .hero {
-              min-height: 70vh;
-            }
-            
-            .hero h1 {
-              font-size: 2rem;
-            }
-            
-            .hero p {
-              font-size: 1rem;
-            }
-          }
-
-          /* Rest of your existing styles remain the same */
-          .logo-text span {
-            color: var(--primary-orange);
-            margin-left: 0.2rem;
-          }
-
+          /* Navigation */
           .nav-links {
             display: flex;
             list-style: none;
@@ -706,6 +647,7 @@ function App() {
             width: 100%;
           }
 
+          /* Buttons */
           .cta-button {
             background: var(--primary-orange);
             color: var(--header-text);
@@ -716,12 +658,32 @@ function App() {
             font-weight: 600;
             transition: all 0.3s ease;
             cursor: pointer;
+            font-size: 1rem;
           }
 
           .cta-button:hover {
             background: var(--dark-orange);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+          }
+
+          /* Inventory Button */
+          .inventory-button {
+            background: var(--accent-blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+          }
+
+          .inventory-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
           }
 
           .mobile-menu-button {
@@ -862,21 +824,12 @@ function App() {
             color: var(--primary-orange);
           }
 
-          .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-          }
-          .footer-description {
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-          }
           .social-icons {
             display: flex;
             gap: 1rem;
+            margin-top: 1rem;
           }
+          
           .social-icon {
             width: 40px;
             height: 40px;
@@ -888,16 +841,19 @@ function App() {
             cursor: pointer;
             transition: all 0.3s ease;
           }
+          
           .social-icon:hover {
             background: var(--primary-orange);
             transform: translateY(-3px);
           }
+          
           .footer-bottom {
             border-top: 1px solid #4a6278;
             padding-top: 2rem;
             text-align: center;
             color: #999;
           }
+
           /* Projects Grid */
           .projects-grid {
             display: grid;
@@ -905,6 +861,7 @@ function App() {
             gap: 2rem;
             margin-top: 3rem;
           }
+          
           .project-card {
             background: var(--primary-white);
             border-radius: 15px;
@@ -912,10 +869,12 @@ function App() {
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
           }
+          
           .project-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
           }
+          
           .project-image {
             height: 200px;
             background: linear-gradient(135deg, var(--primary-orange) 0%, var(--accent-blue) 100%);
@@ -925,8 +884,101 @@ function App() {
             color: white;
             font-size: 3rem;
           }
+          
           .project-content {
             padding: 1.5rem;
+          }
+
+          /* Login Modal Styles */
+          .login-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+          }
+
+          .login-modal {
+            background: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+          }
+
+          .login-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+          }
+
+          .login-header h3 {
+            color: var(--primary-black);
+            font-size: 1.5rem;
+            margin: 0;
+          }
+
+          .login-header button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+          }
+
+          .login-header button:hover {
+            background: #f5f5f5;
+          }
+
+          .login-form .form-group {
+            margin-bottom: 1.5rem;
+          }
+
+          .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-black);
+          }
+
+          .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+          }
+
+          .login-form input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+          }
+
+          .login-error {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: center;
           }
 
           /* Responsive Design */
@@ -941,6 +993,7 @@ function App() {
               flex-direction: column;
               padding: 1rem;
               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+              z-index: 1000;
             }
 
             .nav-open {
@@ -954,6 +1007,121 @@ function App() {
             .cta-button {
               display: none;
             }
+
+            .inventory-button {
+              margin-left: 0;
+              padding: 0.5rem 1rem;
+              font-size: 0.9rem;
+            }
+
+            .hero {
+              padding: 120px 0 80px;
+              min-height: 80vh;
+            }
+            
+            .hero h1 {
+              font-size: 2.5rem;
+            }
+            
+            .hero p {
+              font-size: 1.1rem;
+            }
+
+            .horizontal-scroller-container {
+              padding: 20px 0;
+            }
+            
+            .scrolling-content {
+              gap: 1.5rem;
+            }
+            
+            .scroll-item {
+              padding: 10px 16px;
+              border-radius: 40px;
+            }
+            
+            .point-text {
+              font-size: 0.9rem;
+            }
+
+            .features-grid {
+              grid-template-columns: 1fr;
+              gap: 1.5rem;
+            }
+
+            .feature-card {
+              padding: 1.5rem;
+              min-height: 250px;
+            }
+
+            .logos-grid {
+              grid-template-columns: repeat(4, 1fr);
+              gap: 0.75rem;
+            }
+
+            .logo-item {
+              width: 70px;
+              height: 70px;
+              padding: 8px;
+            }
+
+            .feature-header h3 {
+              font-size: 1.3rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .hero {
+              min-height: 70vh;
+            }
+            
+            .hero h1 {
+              font-size: 2rem;
+            }
+            
+            .hero p {
+              font-size: 1rem;
+            }
+
+            .horizontal-scroller-container {
+              padding: 15px 0;
+            }
+            
+            .scrolling-content {
+              gap: 1rem;
+              padding: 0 0.5rem;
+            }
+            
+            .scroll-item {
+              padding: 8px 14px;
+              border-radius: 35px;
+            }
+            
+            .point-text {
+              font-size: 0.85rem;
+            }
+            
+            .point-icon {
+              font-size: 1rem;
+              width: 20px;
+              height: 20px;
+            }
+
+            .logos-grid {
+              grid-template-columns: repeat(3, 1fr);
+              gap: 0.5rem;
+            }
+
+            .logo-item {
+              width: 60px;
+              height: 60px;
+              padding: 6px;
+            }
+
+            .inventory-button {
+              padding: 0.4rem 0.8rem;
+              font-size: 0.8rem;
+            }
           }
 
           /* Logo responsive adjustments */
@@ -966,6 +1134,7 @@ function App() {
               max-width: 45px;
             }
           }
+          
           @media (max-width: 768px) {
             .logo {
               gap: 0.5rem;
@@ -980,6 +1149,7 @@ function App() {
               max-width: 40px;
             }
           }
+          
           @media (max-width: 480px) {
             .logo-text {
               display: none;
@@ -989,28 +1159,39 @@ function App() {
               max-width: 35px;
             }
           }
+
           /* Animation classes */
           .fade-in {
             animation: fadeIn 1s ease-in;
           }
+          
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
           }
+          
           .slide-in-left {
             animation: slideInLeft 1s ease-out;
           }
+          
           @keyframes slideInLeft {
             from { opacity: 0; transform: translateX(-50px); }
             to { opacity: 1; transform: translateX(0); }
           }
+          
           .pulse {
             animation: pulse 2s infinite;
           }
+          
           @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+          }
+
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
           }
         `}</style>
       </div>
@@ -1018,12 +1199,12 @@ function App() {
   );
 }
 
-// Page Components
+// Home Component
 const Home = () => {
   const [isScrollingPaused, setIsScrollingPaused] = useState(false);
   const [activeLogo, setActiveLogo] = useState(null);
   const scrollContainerRef = useRef(null);
-  
+
   const scrollPoints = [
     "• Deep expertise in Automotive and Embedded System applications",
     "• Strong innovation culture driven by ongoing R&D",
@@ -1032,42 +1213,38 @@ const Home = () => {
     "• Strategic focus on defense sector technologies"
   ];
 
-  // Technology Partners logos (replace with actual image paths)
+  // Technology Partners logos
   const techPartners = [
     { id: 1, name: "NVIDIA", logo: "/clients/NVIDIA.jpg" },
     { id: 2, name: "SBL", logo: "/clients/SBL.png" },
     { id: 3, name: "ADVANTECH", logo: "/clients/Advantech.png" },
     { id: 4, name: "XILINX", logo: "/clients/Xilinx.png" },
-    { id: 5, name: "SCIENTIFIC ", logo: "/clients/Scientific-logo1.png" },
-    {id: 6, name: "SIGLANT", logo: "/clients/siglent-logo1.png"}
+    { id: 5, name: "SCIENTIFIC", logo: "/clients/Scientific-logo1.png" },
+    { id: 6, name: "SIGLANT", logo: "/clients/siglent-logo1.png" }
   ];
 
-  // Defensive Solutions logos (replace with actual image paths)
+  // Defensive Solutions logos
   const defensiveSolutions = [
     { id: 7, name: "DRDL", logo: "/clients/drdo-logo-png_seeklogo-343990.png" },
     { id: 8, name: "BDL", logo: "/clients/BDL_Logo_2.jpg" },
     { id: 9, name: "RCI", logo: "/clients/DRDO-RCI-logo.webp" },
-   
   ];
 
-  // Industrial Services logos (replace with actual image paths)
+  // Industrial Services logos
   const industrialServices = [
     { id: 10, name: "MAGNARUS", logo: "/clients/Magnarus.png" },
     { id: 11, name: "VAISHNVAI TECHNOLOGIES", logo: "/clients/Vaishnavitechnologies.png" },
     { id: 12, name: "SRIDATTA", logo: "/clients/SRIDATTA.png" },
     { id: 13, name: "SILICON ENGINEERS", logo: "/clients/SiliconEngineers.png" },
-    // { id: 14, name: "Industrial 5", logo: "/logos/industrial5.png" },
   ];
 
   const engineeringPartners = [
-    {id: 14, name:"SAARC", logo: "/clients/SAARC.png"},
-    {id: 15, name:"SRIDATTA DMV", logo: "clients/SRIDATTA-DMV.png"},
-    {id: 16, name:"UNITECH", logo: "/clients/Unitech-Engineers.png"},
-    {id: 17, name: "RAINBOW WORKS", logo:"/clients/Rainbow-works.png"}
+    { id: 14, name: "SAARC", logo: "/clients/SAARC.png" },
+    { id: 15, name: "SRIDATTA DMV", logo: "/clients/SRIDATTA-DMV.png" },
+    { id: 16, name: "UNITECH", logo: "/clients/Unitech-Engineers.png" },
+    { id: 17, name: "RAINBOW WORKS", logo: "/clients/Rainbow-works.png" }
+  ];
 
-  ]
-
-  // Handle logo hover/click
   const handleLogoInteraction = (logoId) => {
     setActiveLogo(logoId);
   };
@@ -1197,6 +1374,10 @@ const Home = () => {
                         src={partner.logo} 
                         alt={partner.name}
                         className="partner-logo"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%23333' text-anchor='middle' dy='.3em'%3E${partner.name.substring(0, 3)}%3C/text%3E%3C/svg%3E";
+                        }}
                       />
                       <div className="logo-overlay">
                         <span>{partner.name}</span>
@@ -1211,7 +1392,7 @@ const Home = () => {
             <div className="feature-card">
               <div className="feature-header">
                 <h3>Defensive Solutions</h3>
-                <p>Defensive solutions </p>
+                <p>Defensive solutions</p>
               </div>
               <div className="logos-container">
                 <div className="logos-grid">
@@ -1227,6 +1408,10 @@ const Home = () => {
                         src={solution.logo} 
                         alt={solution.name}
                         className="partner-logo"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%23333' text-anchor='middle' dy='.3em'%3E${solution.name.substring(0, 3)}%3C/text%3E%3C/svg%3E";
+                        }}
                       />
                       <div className="logo-overlay">
                         <span>{solution.name}</span>
@@ -1257,6 +1442,10 @@ const Home = () => {
                         src={service.logo} 
                         alt={service.name}
                         className="partner-logo"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%23333' text-anchor='middle' dy='.3em'%3E${service.name.substring(0, 3)}%3C/text%3E%3C/svg%3E";
+                        }}
                       />
                       <div className="logo-overlay">
                         <span>{service.name}</span>
@@ -1266,34 +1455,40 @@ const Home = () => {
                 </div>
               </div>
             </div>
-             <div className="feature-card">
-        <div className="feature-header">
-          <h3>Engineering Partners</h3>
-          <p>Collaborating with engineering specialists</p>
-        </div>
-        <div className="logos-container">
-          <div className="logos-grid">
-            {engineeringPartners.map((partner) => (
-              <div 
-                key={partner.id}
-                className={`logo-item ${activeLogo === partner.id ? 'active' : ''}`}
-                onMouseEnter={() => handleLogoInteraction(partner.id)}
-                onMouseLeave={() => setActiveLogo(null)}
-                onClick={() => handleLogoInteraction(partner.id)}
-              >
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name}
-                  className="partner-logo"
-                />
-                <div className="logo-overlay">
-                  <span>{partner.name}</span>
+
+            {/* Engineering Partners */}
+            <div className="feature-card">
+              <div className="feature-header">
+                <h3>Engineering Partners</h3>
+                <p>Collaborating with engineering specialists</p>
+              </div>
+              <div className="logos-container">
+                <div className="logos-grid">
+                  {engineeringPartners.map((partner) => (
+                    <div 
+                      key={partner.id}
+                      className={`logo-item ${activeLogo === partner.id ? 'active' : ''}`}
+                      onMouseEnter={() => handleLogoInteraction(partner.id)}
+                      onMouseLeave={() => setActiveLogo(null)}
+                      onClick={() => handleLogoInteraction(partner.id)}
+                    >
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.name}
+                        className="partner-logo"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f0f0f0'/%3E%3Ctext x='50' y='50' font-family='Arial' font-size='14' fill='%23333' text-anchor='middle' dy='.3em'%3E${partner.name.substring(0, 3)}%3C/text%3E%3C/svg%3E";
+                        }}
+                      />
+                      <div className="logo-overlay">
+                        <span>{partner.name}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            </div>
           </div>
         </div>
       </section>
@@ -1312,39 +1507,25 @@ const Home = () => {
     </>
   );
 };
+
+// Services Component
 const Services = () => {
   const services = [
     {
       icon: '모',
       title: 'Embedded',
-      description: 'Embedded.'
+      description: 'Embedded systems development and integration.'
     },
     {
       icon: '🀆',
       title: 'Software',
-      description: 'Software.'
+      description: 'Custom software solutions for various industries.'
     },
     {
       icon: '☁️',
       title: 'Hardware',
-      description: 'Hardware.'
+      description: 'Hardware design and development services.'
     }
-    // ,
-    // {
-    //   icon: '🤖',
-    //   title: 'AI & Machine Learning',
-    //   description: 'Intelligent solutions powered by artificial intelligence and machine learning algorithms.'
-    // },
-    // {
-    //   icon: '🔒',
-    //   title: 'Cybersecurity',
-    //   description: 'Comprehensive security solutions to protect your applications and data from threats.'
-    // },
-    // {
-    //   icon: '📊',
-    //   title: 'Data Analytics',
-    //   description: 'Transform your data into actionable insights with powerful analytics and visualization tools.'
-    // }
   ];
 
   return (
@@ -1352,7 +1533,7 @@ const Services = () => {
       <div className="container">
         <div className="section-title animate-on-scroll">
           <h2>Our Services</h2>
-          <p>Includes...</p>
+          <p>Comprehensive solutions for your business needs</p>
         </div>
         <div className="services-grid">
           {services.map((service, index) => (
@@ -1368,12 +1549,13 @@ const Services = () => {
   );
 };
 
+// About Component
 const About = () => {
   return (
     <section className="section" style={{ paddingTop: '120px' }}>
       <div className="container">
         <div className="section-title animate-on-scroll">
-          <h2>About soft electronic solutions</h2>
+          <h2>About Soft Electronic Solutions</h2>
           <p>Leading the digital transformation with innovative software solutions</p>
         </div>
         
@@ -1399,7 +1581,7 @@ const About = () => {
           </div>
         </div>
 
-        <div className="section-dark" style={{ padding: '3rem', borderRadius: '10px' }} >
+        <div className="section-dark" style={{ padding: '3rem', borderRadius: '10px' }}>
           <div className="section-title">
             <h2>Our Values</h2>
           </div>
@@ -1414,7 +1596,7 @@ const About = () => {
             </div>
             <div className="service-card" style={{ background: 'transparent', color: 'var(--primary-white)', boxShadow: 'none' }}>
               <h3>Partnership</h3>
-              <p>partner with us for effective software/ embedded solutions</p>
+              <p>Partner with us for effective software/embedded solutions</p>
             </div>
           </div>
         </div>
@@ -1423,6 +1605,7 @@ const About = () => {
   );
 };
 
+// Projects Component
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -1432,30 +1615,30 @@ const Projects = () => {
     const mockProjects = [
       {
         id: 1,
-        title: "Embedded",
-        description: "Embedded solution",
+        title: "Embedded System",
+        description: "Advanced embedded solution for automotive industry",
         category: "Embedded",
         status: "completed",
-        technologies: "python, cpp, pyqt",
-        created_at: "2021"
+        technologies: "Python, C++, PyQt",
+        created_at: "2021-06-15"
       },
       {
         id: 2,
-        title: "Software",
-        description: "Software",
-        category: "Hardware",
+        title: "Software Platform",
+        description: "Enterprise software platform for data management",
+        category: "Software",
         status: "ongoing",
-        technologies: "Python",
-        created_at: "2022"
+        technologies: "React, Node.js, MongoDB",
+        created_at: "2022-03-20"
       },
       {
         id: 3,
-        title: "Hardware",
-        description: "Hardware",
-        category: "Research",
+        title: "Hardware Integration",
+        description: "Hardware integration project for industrial automation",
+        category: "Hardware",
         status: "completed",
-        technologies: "Python",
-        created_at: "2023"
+        technologies: "Python, Arduino, IoT",
+        created_at: "2023-01-10"
       }
     ];
     setProjects(mockProjects);
@@ -1487,7 +1670,8 @@ const Projects = () => {
                 color: selectedCategory === category ? 'white' : 'var(--primary-orange)',
                 borderRadius: '25px',
                 cursor: 'pointer',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                fontWeight: '600'
               }}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -1496,7 +1680,7 @@ const Projects = () => {
         </div>
 
         <div className="projects-grid">
-          {filteredProjects.map((project, index) => (
+          {filteredProjects.map((project) => (
             <div key={project.id} className="project-card animate-on-scroll">
               <div className="project-image">
                 {project.category === 'Software' && '모'}
@@ -1544,7 +1728,7 @@ const Projects = () => {
                   color: 'var(--dark-gray)', 
                   fontSize: '0.9rem' 
                 }}>
-                  <span>Status: <strong>{project.status}</strong></span>
+                  <span>Status: <strong style={{ color: project.status === 'completed' ? '#28a745' : '#ffc107' }}>{project.status}</strong></span>
                   <span>{new Date(project.created_at).toLocaleDateString()}</span>
                 </div>
               </div>
@@ -1556,145 +1740,270 @@ const Projects = () => {
   );
 };
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    phone: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
+// Contact Component
+// const Contact = () => {
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     email: '',
+//     company: '',
+//     phone: '',
+//     message: ''
+//   });
+//   const [errors, setErrors] = useState({});
+//   const [isSubmitting, setIsSubmitting] = useState(false);
+//   const [submitMessage, setSubmitMessage] = useState('');
+//   const [submitStatus, setSubmitStatus] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+//   const validateForm = () => {
+//     const newErrors = {};
     
-    try {
-      const response = await axios.post('/api/contact', formData);
-      setSubmitMessage('Thank you for your message! We\'ll get back to you soon.');
-      setFormData({ name: '', email: '', company: '', phone: '', message: '' });
-    } catch (error) {
-      setSubmitMessage('Sorry, there was an error sending your message. Please try again.');
-    }
+//     if (!formData.name.trim()) {
+//       newErrors.name = 'Name is required';
+//     } else if (formData.name.trim().length < 2) {
+//       newErrors.name = 'Name must be at least 2 characters';
+//     }
     
-    setIsSubmitting(false);
-  };
+//     if (!formData.email.trim()) {
+//       newErrors.email = 'Email is required';
+//     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+//       newErrors.email = 'Please enter a valid email address';
+//     }
+    
+//     if (!formData.message.trim()) {
+//       newErrors.message = 'Message is required';
+//     } else if (formData.message.trim().length < 10) {
+//       newErrors.message = 'Message must be at least 10 characters';
+//     }
+    
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   };
 
-  return (
-    <section className="section" style={{ paddingTop: '120px' }}>
-      <div className="container">
-        <div className="section-title animate-on-scroll">
-          <h2>Get In Touch</h2>
-          <p>Ready to start your project? Contact us today for a free consultation</p>
-        </div>
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({
+//       ...formData,
+//       [name]: value
+//     });
+//     if (errors[name]) {
+//       setErrors({
+//         ...errors,
+//         [name]: ''
+//       });
+//     }
+//   };
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="animate-on-scroll">
-          <div>
-            <h3 style={{ marginBottom: '1rem', color: 'var(--primary-black)' }}>Contact Information</h3>
-            <div style={{ marginBottom: '2rem' }}>
-              <p><strong>Email:</strong> softelectronicsolutions@gmail.com</p>
-              <p><strong>Contact:</strong> 8415796558</p>
-              <p><strong>Address:</strong> 13-6/33, Ground floor, Road number 2, Gayathri hills, Badangpet</p>
-            </div>
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+    
+//     if (!validateForm()) {
+//       setSubmitMessage('Please fix the errors below');
+//       setSubmitStatus('error');
+//       return;
+//     }
+    
+//     setIsSubmitting(true);
+//     setSubmitMessage('');
+//     setSubmitStatus('');
+    
+//     try {
+//       const response = await axios.post('http://192.168.29.239:7501/api/contact', formData, {
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       });
+      
+//       if (response.data.success) {
+//         setSubmitMessage(response.data.message || 'Thank you for your message! We will get back to you soon.');
+//         setSubmitStatus('success');
+//         setFormData({ name: '', email: '', company: '', phone: '', message: '' });
+//       } else {
+//         setSubmitMessage(response.data.message || 'Failed to send message. Please try again.');
+//         setSubmitStatus('error');
+//       }
+//     } catch (error) {
+//       console.error('Error submitting form:', error);
+      
+//       let errorMessage = 'Failed to send message. Please try again later.';
+      
+//       if (error.response) {
+//         if (error.response.data && error.response.data.errors) {
+//           const serverErrors = error.response.data.errors.join(', ');
+//           errorMessage = `Validation error: ${serverErrors}`;
+//         } else if (error.response.data && error.response.data.message) {
+//           errorMessage = error.response.data.message;
+//         } else if (error.response.status === 429) {
+//           errorMessage = 'Too many requests. Please try again in 15 minutes.';
+//         }
+//       } else if (error.request) {
+//         errorMessage = 'Network error. Please check your internet connection.';
+//       }
+      
+//       setSubmitMessage(errorMessage);
+//       setSubmitStatus('error');
+//     } finally {
+//       setIsSubmitting(false);
+//     }
+//   };
+
+//   return (
+//     <section className="section" style={{ paddingTop: '120px' }}>
+//       <div className="container">
+//         <div className="section-title animate-on-scroll">
+//           <h2>Get In Touch</h2>
+//           <p>Ready to start your project? Contact us today for a free consultation</p>
+//         </div>
+
+//         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem' }} className="animate-on-scroll">
+//           <div>
+//             <h3 style={{ marginBottom: '1rem', color: 'var(--primary-black)' }}>Contact Information</h3>
+//             <div style={{ marginBottom: '2rem' }}>
+//               <p><strong>Email:</strong> softelectronicsolutions@gmail.com</p>
+//               <p><strong>Contact:</strong> 8415796558</p>
+//               <p><strong>Address:</strong> 13-6/33, Ground floor, Road number 2, Gayathri hills, Badangpet</p>
+//             </div>
             
-            <h3 style={{ marginBottom: '1rem', color: 'var(--primary-black)' }}>Business Hours</h3>
-            <p>Monday - Saturday: 10:00 AM - 7:00 PM</p>
-            <p>Sunday: Closed</p>
-          </div>
+//             <h3 style={{ marginBottom: '1rem', color: 'var(--primary-black)' }}>Business Hours</h3>
+//             <p>Monday - Saturday: 10:00 AM - 7:00 PM</p>
+//             <p>Sunday: Closed</p>
+//           </div>
 
-          <div>
-            <form onSubmit={handleSubmit} className="contact-form">
-              <div className="form-group">
-                <label htmlFor="name">Full Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+//           <div>
+//             <form onSubmit={handleSubmit} className="contact-form">
+//               <div className="form-group">
+//                 <label htmlFor="name">Full Name *</label>
+//                 <input
+//                   type="text"
+//                   id="name"
+//                   name="name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   required
+//                   className={errors.name ? 'error' : ''}
+//                   placeholder="Your full name"
+//                 />
+//                 {errors.name && (
+//                   <span style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+//                     {errors.name}
+//                   </span>
+//                 )}
+//               </div>
               
-              <div className="form-group">
-                <label htmlFor="email">Email Address *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+//               <div className="form-group">
+//                 <label htmlFor="email">Email Address *</label>
+//                 <input
+//                   type="email"
+//                   id="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   required
+//                   className={errors.email ? 'error' : ''}
+//                   placeholder="Your email address"
+//                 />
+//                 {errors.email && (
+//                   <span style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+//                     {errors.email}
+//                   </span>
+//                 )}
+//               </div>
               
-              <div className="form-group">
-                <label htmlFor="company">Company</label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
-              </div>
+//               <div className="form-group">
+//                 <label htmlFor="company">Company</label>
+//                 <input
+//                   type="text"
+//                   id="company"
+//                   name="company"
+//                   value={formData.company}
+//                   onChange={handleChange}
+//                   placeholder="Your company name (optional)"
+//                 />
+//               </div>
               
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
+//               <div className="form-group">
+//                 <label htmlFor="phone">Phone Number</label>
+//                 <input
+//                   type="tel"
+//                   id="phone"
+//                   name="phone"
+//                   value={formData.phone}
+//                   onChange={handleChange}
+//                   placeholder="Your phone number (optional)"
+//                 />
+//               </div>
               
-              <div className="form-group">
-                <label htmlFor="message">Message *</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="5"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
+//               <div className="form-group">
+//                 <label htmlFor="message">Message *</label>
+//                 <textarea
+//                   id="message"
+//                   name="message"
+//                   rows="5"
+//                   value={formData.message}
+//                   onChange={handleChange}
+//                   required
+//                   className={errors.message ? 'error' : ''}
+//                   placeholder="How can we help you?"
+//                 ></textarea>
+//                 {errors.message && (
+//                   <span style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem', display: 'block' }}>
+//                     {errors.message}
+//                   </span>
+//                 )}
+//               </div>
               
-              <button 
-                type="submit" 
-                className="cta-button"
-                disabled={isSubmitting}
-                style={{ width: '100%' }}
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
+//               <button 
+//                 type="submit" 
+//                 className="cta-button"
+//                 disabled={isSubmitting}
+//                 style={{ width: '100%' }}
+//               >
+//                 {isSubmitting ? (
+//                   <>
+//                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+//                       <span>Sending...</span>
+//                       <span style={{ fontSize: '0.875rem' }}>⏳</span>
+//                     </span>
+//                   </>
+//                 ) : 'Send Message'}
+//               </button>
               
-              {submitMessage && (
-                <p style={{ 
-                  marginTop: '1rem', 
-                  color: submitMessage.includes('error') ? 'red' : 'green',
-                  textAlign: 'center'
-                }}>
-                  {submitMessage}
-                </p>
-              )}
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+//               {submitMessage && (
+//                 <div style={{ 
+//                   marginTop: '1rem', 
+//                   padding: '1rem',
+//                   backgroundColor: submitStatus === 'success' ? 'rgba(40, 167, 69, 0.1)' : 'rgba(220, 53, 69, 0.1)',
+//                   color: submitStatus === 'success' ? '#28a745' : '#dc3545',
+//                   borderRadius: '8px',
+//                   textAlign: 'center',
+//                   border: `1px solid ${submitStatus === 'success' ? '#28a745' : '#dc3545'}`
+//                 }}>
+//                   <p style={{ margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+//                     <span>
+//                       {submitStatus === 'success' ? '✓' : '⚠'}
+//                     </span>
+//                     <span>{submitMessage}</span>
+//                   </p>
+//                 </div>
+//               )}
+//             </form>
+//           </div>
+//         </div>
+//       </div>
+      
+//       <style jsx>{`
+//         .form-group input.error,
+//         .form-group textarea.error {
+//           border-color: #dc3545;
+//           background-color: rgba(220, 53, 69, 0.05);
+//         }
+        
+//         .form-group input.error:focus,
+//         .form-group textarea.error:focus {
+//           box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+//         }
+//       `}</style>
+//     </section>
+//   );
+// };
 
 export default App;
