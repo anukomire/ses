@@ -19,7 +19,7 @@ function App() {
     try {
       if (loginData.username === 'user' && loginData.password === 'user@1234') {
         // Successful login
-        window.open('http://10.103.57.190:3002', '_blank');
+        window.open('http://10.103.57.190:3001', '_blank');
         setIsLoginOpen(false);
         setLoginData({ username: '', password: '' });
       } else {
